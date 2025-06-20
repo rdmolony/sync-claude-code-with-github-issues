@@ -30,7 +30,10 @@ You'll need three tools installed:
 
 Then:
 
-1. **Copy CLAUDE.md to your repository**:
+1.a **Use this repository as a template**
+   Click `Use this template` & [follow the instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+
+1.b **Copy CLAUDE.md to your repository**:
    Copy the contents of [`CLAUDE.md`](CLAUDE.md) to your project's root directory. This file contains instructions that tell Claude Code how to track conversations.
 
 2. **Authenticate with GitHub**:
