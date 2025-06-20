@@ -8,6 +8,10 @@ To do so, this repository includes a file called `CLAUDE.md` which provides inst
 - 📝 **Log Conversations to Issues**: All prompts and responses are logged with timestamps to the Goal's GitHub issue
 - 🚀 **Smart Commits**: Generate `Git` commits & link them to their corresponding GitHub issues
 
+>[!NOTE]
+> The idea of linking code to its conversation isn't novel -
+> - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers.
+
 ## Installation
 
 You'll need three tools installed:
