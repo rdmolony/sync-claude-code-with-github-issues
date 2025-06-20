@@ -26,9 +26,9 @@ When a user prompt represents a new goal (distinct from the current tracked issu
 
 ### Conversation Logging
 1. Before answering any user prompt, first save the previous prompt and your responses to a markdown file in folder `logs` named with the current timestamp (format: `YYYY-MM-DD-HHMMSS.md`)
-2. Log the conversation in this format:
+2. Log the conversation in this format (detect actual GitHub username using `gh api user --jq .login`):
    ```markdown
-   (@user) User's prompt/question
+   (@username) User's prompt/question
    
    (claude) Your complete response including tool usage and output
    ```
@@ -47,6 +47,7 @@ When a goal has been completed:
 ### Commands
 - `gh issue create --title "Goal Title" --body ""` - Create tracking issue
 - `date +"%Y-%m-%d-%H%M%S"` - Generate timestamp for log files
+- `gh api user --jq .login` - Get current GitHub username
 - `gh issue comment <issue-number> --body-file <timestamp-file.md>` - Add conversation log as issue comment
 - `git add` - Stage files for commit
 - `git commit -m "message"` - Commit with message
