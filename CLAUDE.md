@@ -17,6 +17,13 @@ This repository uses Nix flakes for development environment management with dire
 2. Create a GitHub issue using `gh issue create --title "<user's goal>" --body ""`
 3. Note the issue number for reference throughout the session
 
+### New Goal Detection
+When a user prompt represents a new goal (distinct from the current tracked issue):
+1. Recognize the new goal and infer an appropriate GitHub issue title
+2. Ask the user if they want to create a new issue for this goal
+3. If yes, create a new GitHub issue and switch tracking to the new issue number
+4. Examples of new goals: "let's prove that...", "now implement...", "create a new feature for...", "fix the bug in..."
+
 ### Conversation Logging
 1. Before answering any user prompt, first save the previous prompt and your responses to a markdown file in folder `logs` named with the current timestamp (format: `YYYY-MM-DD-HHMMSS.md`)
 2. Log the conversation in this format:
