@@ -14,7 +14,7 @@ You'll need three tools installed:
 
 - [Claude Code](https://github.com/anthropics/claude-code)
 - [GitHub CLI](https://github.com/cli/cli)
-- [Git](https://git-scm.com/downloads)[^GIT]
+- [Git](https://git-scm.com/downloads)
 
 >[!NOTE]
 > If you're into [`Nix`](https://github.com/NixOS/nix), then you'll just need one tool.
