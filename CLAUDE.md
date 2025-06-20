@@ -28,7 +28,7 @@ When a user prompt represents a new goal (distinct from the current tracked issu
 1. Before answering any user prompt, first save the previous prompt and your responses to a markdown file in folder `logs` named with the current timestamp (format: `YYYY-MM-DD-HHMMSS.md`)
 2. Log the conversation in this format:
    ```markdown
-   (@rdmolony) User's prompt/question
+   (@user) User's prompt/question
    
    (claude) Your complete response including tool usage and output
    ```
