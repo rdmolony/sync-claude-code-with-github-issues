@@ -18,15 +18,15 @@ This repository uses Nix flakes for development environment management with dire
 3. Note the issue number for reference throughout the session
 
 ### Conversation Logging
-1. For each user interaction, create a temporary markdown file in folder `logs` named with the current timestamp (format: `YYYY-MM-DD-HHMMSS.md`)
+1. Before answering any user prompt, first save the previous prompt and your responses to a markdown file in folder `logs` named with the current timestamp (format: `YYYY-MM-DD-HHMMSS.md`)
 2. Log the conversation in this format:
    ```markdown
    (@rdmolony) User's prompt/question
    
    (claude) Your complete response including tool usage and output
    ```
-3. Continue appending to the same file throughout the interaction until the next user prompt
-4. Save the user prompt and responses as a comment to the goal's GitHub issue thread using `gh issue comment <issue-number> --body-file <timestamp-file.md>`
+3. Create a GitHub issue comment from the log file using `gh issue comment <issue-number> --body-file <timestamp-file.md>`
+4. Then proceed to answer the current user prompt
 
 ### Commands
 - `gh issue create --title "Goal Title" --body ""` - Create tracking issue
