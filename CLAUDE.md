@@ -28,7 +28,19 @@ This repository uses Nix flakes for development environment management with dire
 3. Create a GitHub issue comment from the log file using `gh issue comment <issue-number> --body-file <timestamp-file.md>`
 4. Then proceed to answer the current user prompt
 
+### Goal Completion Workflow
+When a goal has been completed:
+1. Suggest a commit title and message to the user
+2. Include a line in the commit message to link to the relevant issue: "Closes #<issue-number>"
+3. If the user accepts the proposed commit:
+   - Stage files with `git add`
+   - Commit with the approved message
+   - Push to GitHub using `git push origin "$(git branch --show-current)"`
+
 ### Commands
 - `gh issue create --title "Goal Title" --body ""` - Create tracking issue
 - `date +"%Y-%m-%d-%H%M%S"` - Generate timestamp for log files
 - `gh issue comment <issue-number> --body-file <timestamp-file.md>` - Add conversation log as issue comment
+- `git add` - Stage files for commit
+- `git commit -m "message"` - Commit with message
+- `git push origin "$(git branch --show-current)"` - Push to current branch
