@@ -9,6 +9,8 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
+          gh
+          git
         ];
       };
     }
