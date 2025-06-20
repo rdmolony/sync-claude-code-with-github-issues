@@ -1,24 +1,29 @@
 # Sync Claude Code with GitHub Issues
 
-If you're using LLMs to generate code, you might want to link your code commits to your conversations so your colleagues (or your future self) can understand the code's conversational context.
+If you're using Large Language Models (LLMs) to generate code, you might want to link your code commits to your conversations so your colleagues (or your future self) can understand the code's conversational context.
 
-To do so, this repository includes a file called `CLAUDE.md` which provides instructions to `Claude Code` which kindly ask it to ...
+To do so, this repository includes a file called `CLAUDE.md` which provides instructions to [`Claude Code`](https://github.com/anthropics/claude-code) which kindly ask it to ...
 
 - 🎯 **Goal Track**: Each conversation goal gets its own GitHub issue
 - 📝 **Log Conversations to Issues**: All prompts and responses are logged with timestamps to the Goal's GitHub issue
 - 🚀 **Smart Commits**: Generate `Git` commits & link them to their corresponding GitHub issues
 
+The instructions teach [`Claude Code`](https://github.com/anthropics/claude-code) how to use the [`GitHub CLI`](https://github.com/cli/cli) & [`Git`](https://git-scm.com/downloads) to to do so.
+
 >[!NOTE]
 > The idea of linking code to its conversation isn't novel -
 > - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers.
+
+>[!WARNING]
+> This tool is both experimental & [non-deterministic](https://en.wikipedia.org/wiki/Nondeterministic_programming). It merely asks an LLM to follow instructions, and makes no guarantees that the LLM will do so! However, that doesn't mean it's not useful.
 
 ## Installation
 
 You'll need three tools installed:
 
-- [Claude Code](https://github.com/anthropics/claude-code)
-- [GitHub CLI](https://github.com/cli/cli)
-- [Git](https://git-scm.com/downloads)
+- [`Claude Code`](https://github.com/anthropics/claude-code)
+- [`GitHub CLI`](https://github.com/cli/cli)
+- [`Git`](https://git-scm.com/downloads)
 
 >[!NOTE]
 > If you're into [`Nix`](https://github.com/NixOS/nix), then you'll just need one tool.
@@ -30,11 +35,8 @@ You'll need three tools installed:
 
 Then:
 
-1.a **Use this repository as a template**
+1. **Use this repository as a template** or **Copy CLAUDE.md to your repository**
    Click `Use this template` & [follow the instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
-
-1.b **Copy CLAUDE.md to your repository**:
-   Copy the contents of [`CLAUDE.md`](CLAUDE.md) to your project's root directory. This file contains instructions that tell Claude Code how to track conversations.
 
 2. **Authenticate with GitHub**:
    ```bash
