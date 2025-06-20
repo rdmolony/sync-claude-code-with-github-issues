@@ -1,4 +1,4 @@
-# Track LLM Conversations
+# Sync Claude Code with GitHub Issues
 
 If you're using LLMs to generate code, you might want to link your code commits to your conversations so your colleagues (or your future self) can understand the code's conversational context.
 
