@@ -14,7 +14,7 @@ The instructions teach [`Claude Code`](https://github.com/anthropics/claude-code
 
 >[!NOTE]
 > The idea of linking code to its conversation isn't novel -
-> - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers.
+> - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers. Ever since reading Simon's blog post [The Perfect Commit](https://simonwillison.net/2022/Oct/29/the-perfect-commit/), I've found it really helpful for my future self to link commits to broader context on GitHub Issues by including issue numbers in my commit messages.
 > - Simon Wardley has been talking about this style of conversational programming for years, I feel like this is in keeping with the spirit of [Why the Fuss About Conversational Programming?](https://blog.gardeviance.org/2023/01/why-fuss-about-conversational.html)
 
 >[!WARNING]
