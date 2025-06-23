@@ -13,6 +13,7 @@ The instructions teach [`Claude Code`](https://github.com/anthropics/claude-code
 >[!NOTE]
 > The idea of linking code to its conversation isn't novel -
 > - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers.
+> - Simon Wardley has been talking about this style of conversational programming for years, I feel like this is in keeping with the spirit of [Why the Fuss About Conversational Programming?](https://blog.gardeviance.org/2023/01/why-fuss-about-conversational.html)
 
 >[!WARNING]
 > This tool is both experimental & [non-deterministic](https://en.wikipedia.org/wiki/Nondeterministic_programming). It merely asks an LLM to follow instructions, and makes no guarantees that the LLM will do so! However, that doesn't mean it's not useful.
