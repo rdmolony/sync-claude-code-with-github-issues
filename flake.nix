@@ -11,6 +11,7 @@
         buildInputs = with pkgs; [
           gh
           git
+          claude-code
         ];
       };
     }
