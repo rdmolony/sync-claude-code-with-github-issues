@@ -10,6 +10,8 @@ To do so, this repository includes a file called `CLAUDE.md` which provides inst
 
 The instructions teach [`Claude Code`](https://github.com/anthropics/claude-code) how to use the [`GitHub CLI`](https://github.com/cli/cli) & [`Git`](https://git-scm.com/downloads) to to do so.
 
+![demo](https://github.com/user-attachments/assets/1a3106ed-8b97-4439-9b27-2d0c242a054c)
+
 >[!NOTE]
 > The idea of linking code to its conversation isn't novel -
 > - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers.
