@@ -1,0 +1,18 @@
+{
+  "name": "claude-sync",
+  "version": "1.0.0",
+  "description": "CLI tool to watch and parse Claude's JSONL conversation logs",
+  "main": "cli.js",
+  "bin": {
+    "claude-sync": "./cli.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "start": "node cli.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

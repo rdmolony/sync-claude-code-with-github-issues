@@ -12,6 +12,7 @@
           gh
           git
           claude-code
+          nodejs
         ];
       };
     }
