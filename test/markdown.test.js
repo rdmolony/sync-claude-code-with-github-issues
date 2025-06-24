@@ -48,9 +48,11 @@ describe('Markdown Converter', () => {
     const result = convertToMarkdown(lines);
     
     assert(result.includes('**(llm)**'));
-    assert(result.includes('**Tool Use:** bash'));
+    assert(result.includes('<details>'));
+    assert(result.includes('<summary>🔧 Tool Use: bash</summary>'));
     assert(result.includes('```json'));
     assert(result.includes('"command": "ls -la"'));
+    assert(result.includes('</details>'));
   });
 
   test('convertToMarkdown should skip invalid lines', () => {
@@ -83,8 +85,10 @@ describe('Markdown Converter', () => {
     
     assert(result.includes('**(llm)**'));
     assert(result.includes('Here\'s the result:'));
-    assert(result.includes('**Tool Use:** read'));
+    assert(result.includes('<details>'));
+    assert(result.includes('<summary>🔧 Tool Use: read</summary>'));
     assert(result.includes('"file": "test.txt"'));
+    assert(result.includes('</details>'));
   });
 
   test('convertToMarkdown should skip empty messages', () => {

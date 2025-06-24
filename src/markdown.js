@@ -56,10 +56,11 @@ function convertToMarkdown(lines) {
         markdown += `${item.text}\n\n`;
         hasValidMessages = true;
       } else if (item.type === 'tool_use') {
-        markdown += `**Tool Use:** ${item.name}\n\n`;
+        markdown += `<details>\n<summary>🔧 Tool Use: ${item.name}</summary>\n\n`;
         markdown += '```json\n';
         markdown += JSON.stringify(item.input, null, 2);
         markdown += '\n```\n\n';
+        markdown += '</details>\n\n';
         hasValidMessages = true;
       }
     }
