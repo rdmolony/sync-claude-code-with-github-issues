@@ -1,24 +1,24 @@
-# Sync Claude Code with GitHub Issues
+# Claude Conversation Tools
+
+A CLI toolkit for working with Claude Code conversation logs. This project focuses on deterministic tools that process Claude's JSONL conversation files.
+
+> [!WARNING]
+> This tool is experimental, it's still a work in progress, see the Issues tab for the remaining items to bring this to completion.
+
+## Features
+
+- 📊 **Watch**: Real-time monitoring of Claude conversations as they happen
+- 📄 **Export**: Convert JSONL conversation logs to clean, readable markdown
+- 🔧 **Reliable**: Built with comprehensive test coverage using TDD principles
+
+## Why This Matters
 
 If you're using Large Language Models (LLMs) to generate code, you might want to link your code commits to your conversations so your colleagues (or your future self) can understand the code's conversational context.
-
-To do so, this repository includes a file called `CLAUDE.md` which provides instructions to [`Claude Code`](https://github.com/anthropics/claude-code) which kindly ask it to ...
-
-- 🎯 **Goal Track**: Each conversation goal gets its own GitHub issue
-- 📝 **Log Conversations to Issues**: All prompts and responses are logged with timestamps to the Goal's GitHub issue
-- 🚀 **Smart Commits**: Generate `Git` commits & link them to their corresponding GitHub issues
-
-The instructions teach [`Claude Code`](https://github.com/anthropics/claude-code) how to use the [`GitHub CLI`](https://github.com/cli/cli) & [`Git`](https://git-scm.com/downloads) to to do so.
-
-<video src='https://github.com/user-attachments/assets/1a3106ed-8b97-4439-9b27-2d0c242a054c' width=180/></video>
 
 >[!NOTE]
 > The idea of linking code to its conversation isn't novel -
 > - Simon Willison has been linking his conversations to his LLM-generated code for some time now at [`simonw/tools`](https://github.com/simonw/tools), however, from what I can see (on 20th June 2025) he uses links to his web chats hosted by LLM providers. Ever since reading Simon's blog post [The Perfect Commit](https://simonwillison.net/2022/Oct/29/the-perfect-commit/), I've found it really helpful for my future self to link commits to broader context on GitHub Issues by including issue numbers in my commit messages.
 > - Simon Wardley has been talking about this style of conversational programming for years, I feel like this is in keeping with the spirit of [Why the Fuss About Conversational Programming?](https://blog.gardeviance.org/2023/01/why-fuss-about-conversational.html)
-
->[!WARNING]
-> This tool is both experimental & [non-deterministic](https://en.wikipedia.org/wiki/Nondeterministic_programming). It merely asks an LLM to follow instructions, and makes no guarantees that the LLM will do so! However, that doesn't mean it's not useful.
 
 ## Installation
 
@@ -53,32 +53,61 @@ Then:
 
 Now `Claude Code` **should be** smart enough to log your conversations to GitHub Issues
 
-## Example Workflow
+## Usage
+
+### Watch Mode - Real-time Monitoring
+
+Monitor your Claude conversations as they happen:
 
 ```bash
-$ claude
-# Claude asks: "Would you like me to log this session to GitHub?"
-# You say: "yes"
-# Claude creates issue and starts logging
-
-# Your conversation gets tracked automatically
-# When done, Claude suggests: "Commit: feat: add user authentication"
-# You approve, and changes are committed with "Closes #123"
+./cli.js watch ~/.claude/projects/your-project/conversation-id.jsonl
 ```
 
-## File Structure
+This will show new messages in real-time as you chat with Claude.
+
+### Export Mode - Generate Markdown
+
+Convert conversation logs to clean, readable markdown:
+
+```bash
+./cli.js export input.jsonl output.md
+```
+
+The exported markdown includes:
+- Clean conversation flow with `**(user)**` and `**(llm)**` labels
+- Collapsible tool use sections with `<details>` tags  
+- Proper formatting for sharing and documentation
+
+## Project Structure
 
 ```
-your-project/
-├── CLAUDE.md          # Instructions for Claude Code
-├── logs/              # Timestamped conversation logs synced with GitHub
-│   ├── 2025-06-20-143526.md
-│   └── 2025-06-20-145453.md
+claude-conversation-tools/
+├── cli.js             # Main CLI entry point
+├── src/               # Source modules
+│   ├── parser.js      # JSONL parsing and message extraction
+│   ├── watcher.js     # File watching functionality  
+│   └── markdown.js    # Markdown conversion
+├── test/              # Test suites
+│   ├── parser.test.js
+│   ├── watcher.test.js
+│   └── markdown.test.js
+├── package.json       # Dependencies and scripts
 └── README.md          # This file
 ```
 
+## Development
+
+This project follows Test-Driven Development (TDD). To contribute:
+
+1. **Write tests first** for new features
+2. **Run tests** to ensure they fail: `npm test`
+3. **Implement** the minimal code to make tests pass
+4. **Refactor** while keeping tests green
+
+See `CLAUDE.md` for detailed development guidelines.
+
 ## Troubleshooting
 
-- **Authentication issues**: Run `gh auth status` to check GitHub CLI authentication
-- **Permission errors**: Ensure you have write access to the repository
-- **Missing logs directory**: Create it with `mkdir logs`
+- **File not found**: Ensure the JSONL file path is correct
+- **Permission errors**: Check file read permissions
+- **Tests failing**: Run `npm test` to see specific error details
