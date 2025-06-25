@@ -38,6 +38,24 @@ This project follows Test-Driven Development (TDD) principles for all feature de
 - Test files follow pattern: `test/*.test.js`
 - Each module should have corresponding tests (e.g., `src/parser.js` → `test/parser.test.js`)
 
+## Nix Flake Validation
+
+This project includes Nix flake apps for validating the package build and flake structure:
+
+### Flake Testing Commands
+
+- `nix run .#check` - Run basic flake check to validate outputs and ensure they can be built
+- `nix run .#check-all` - Run flake check for all supported systems (comprehensive validation)
+- `nix run .#build-test` - Test package builds and functionality (builds both outputs and tests CLI)
+
+### Manual Flake Commands
+
+- `nix flake check` - Official Nix command to validate flake structure
+- `nix build .#default` - Build the default package
+- `nix build .#claude-sync` - Build the named package
+- `nix run .#claude-sync -- --help` - Run the package directly to test functionality
+- `nix flake show` - Display all flake outputs (packages, apps, devShells)
+
 ### Testing Guidelines
 
 - **Comprehensive Coverage**: Every module and function should have tests
