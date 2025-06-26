@@ -83,6 +83,8 @@
           git
           claude-code
           nodejs
+          claude-sync
+          jq
         ];
       };
     }

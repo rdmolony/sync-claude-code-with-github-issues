@@ -4,7 +4,7 @@ const { parseArgs } = require('node:util');
 const fs = require('node:fs');
 const { watchFile } = require('./src/watcher');
 const { processNewLines } = require('./src/parser');
-const { convertToMarkdown } = require('./src/markdown');
+const { convertToMarkdown, segmentConversation, generateSegmentFilenames } = require('./src/markdown');
 
 function showHelp() {
   console.log(`
@@ -79,13 +79,26 @@ function main() {
       const content = fs.readFileSync(inputFile, 'utf8');
       const lines = content.split('\n').filter(line => line.trim());
       
-      // Convert to markdown
-      const markdown = convertToMarkdown(lines);
+      // Segment the conversation by GOAL: messages
+      const segments = segmentConversation(lines);
       
-      // Write markdown file
-      fs.writeFileSync(outputFile, markdown, 'utf8');
-      
-      console.log(`Successfully exported ${lines.length} lines from ${inputFile} to ${outputFile}`);
+      if (segments.length > 1) {
+        // Multiple segments found - create multiple files
+        const filenames = generateSegmentFilenames(outputFile, segments.length);
+        
+        for (let i = 0; i < segments.length; i++) {
+          const markdown = convertToMarkdown(segments[i]);
+          fs.writeFileSync(filenames[i], markdown, 'utf8');
+        }
+        
+        console.log(`Successfully exported ${lines.length} lines from ${inputFile} to ${segments.length} files: ${filenames.join(', ')}`);
+      } else {
+        // Single segment or no segments - create single file
+        const markdown = convertToMarkdown(lines);
+        fs.writeFileSync(outputFile, markdown, 'utf8');
+        
+        console.log(`Successfully exported ${lines.length} lines from ${inputFile} to ${outputFile}`);
+      }
     } catch (error) {
       console.error(`Error processing files: ${error.message}`);
       process.exit(1);

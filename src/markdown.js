@@ -1,4 +1,5 @@
 const { parseJsonlLine, extractClaudeMessage, getMessageRole } = require('./parser');
+const path = require('path');
 
 function convertToMarkdown(lines) {
   let markdown = '# Conversation Log\n\n';
@@ -73,6 +74,75 @@ function convertToMarkdown(lines) {
   return markdown;
 }
 
+function segmentConversation(lines) {
+  const segments = [];
+  let currentSegment = [];
+  
+  for (const line of lines) {
+    const messageObj = parseJsonlLine(line);
+    if (!messageObj || !messageObj.message) {
+      continue;
+    }
+    
+    const role = getMessageRole(messageObj);
+    const content = messageObj.message.content;
+    
+    // Check if this is a user message starting with "GOAL:"
+    let isGoalMessage = false;
+    if (role === 'user') {
+      if (Array.isArray(content)) {
+        // New format: content is an array of objects
+        for (const item of content) {
+          if (item.type === 'text' && item.text && item.text.trim().startsWith('GOAL:')) {
+            isGoalMessage = true;
+            break;
+          }
+        }
+      } else if (typeof content === 'string' && content.trim().startsWith('GOAL:')) {
+        // Legacy format: content is a string
+        isGoalMessage = true;
+      }
+    }
+    
+    // If we found a GOAL message and we have content in current segment, start a new segment
+    if (isGoalMessage && currentSegment.length > 0) {
+      segments.push(currentSegment);
+      currentSegment = [];
+    }
+    
+    currentSegment.push(line);
+  }
+  
+  // Add the last segment if it has content
+  if (currentSegment.length > 0) {
+    segments.push(currentSegment);
+  }
+  
+  // If no segments were created, return the entire conversation as one segment
+  if (segments.length === 0) {
+    return [lines];
+  }
+  
+  return segments;
+}
+
+function generateSegmentFilenames(baseFilename, segmentCount) {
+  const filenames = [];
+  const parsedPath = path.parse(baseFilename);
+  
+  for (let i = 1; i <= segmentCount; i++) {
+    const filename = path.join(
+      parsedPath.dir,
+      `${parsedPath.name}-${i}${parsedPath.ext}`
+    );
+    filenames.push(filename);
+  }
+  
+  return filenames;
+}
+
 module.exports = {
-  convertToMarkdown
+  convertToMarkdown,
+  segmentConversation,
+  generateSegmentFilenames
 };
