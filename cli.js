@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const { watchFile } = require('./src/watcher');
 const { processNewLines } = require('./src/parser');
 const { convertToMarkdown, segmentConversation, generateSegmentFilenames } = require('./src/markdown');
+const { inferClaudeJsonlPath } = require('./src/path-inference');
 
 function showHelp() {
   console.log(`
@@ -12,14 +13,16 @@ Usage: claude-sync <command> [options]
 
 Commands:
   watch <file>           Watch a JSONL file and print new messages
-  export <input> <output> Export JSONL file to markdown
+  export <output>        Export current conversation to markdown (auto-infers input)
+  export <input> <output> Export JSONL file to markdown (explicit input)
 
 Options:
   -h, --help     Show this help message
 
 Examples:
   claude-sync watch /path/to/claude-logs.jsonl
-  claude-sync export /path/to/input.jsonl /path/to/output.md
+  claude-sync export conversation.md              # Auto-infer current conversation
+  claude-sync export /path/to/input.jsonl /path/to/output.md  # Explicit input/output
 `);
 }
 
@@ -60,12 +63,31 @@ function main() {
       process.exit(0);
     });
   } else if (command === 'export') {
-    const inputFile = args[1];
-    const outputFile = args[2];
+    let inputFile, outputFile;
     
-    if (!inputFile || !outputFile) {
-      console.error('Error: Please provide both input and output files');
-      console.error('Usage: claude-sync export <input.jsonl> <output.md>');
+    // Determine if we're using auto-inference (1 arg) or explicit mode (2 args)
+    if (args.length === 2) {
+      // Single argument: auto-infer input file, use argument as output
+      outputFile = args[1];
+      inputFile = inferClaudeJsonlPath();
+      
+      if (!inputFile) {
+        console.error('Error: Could not infer JSONL file path from current directory');
+        console.error('Make sure you are in a directory that corresponds to a Claude project,');
+        console.error('or use explicit input/output files:');
+        console.error('Usage: claude-sync export <input.jsonl> <output.md>');
+        process.exit(1);
+      }
+      
+      console.log(`Auto-inferred input file: ${inputFile}`);
+    } else if (args.length === 3) {
+      // Two arguments: explicit input and output files
+      inputFile = args[1];
+      outputFile = args[2];
+    } else {
+      console.error('Error: Please provide output file or both input and output files');
+      console.error('Usage: claude-sync export <output.md>  # Auto-infer input');
+      console.error('   or: claude-sync export <input.jsonl> <output.md>  # Explicit');
       process.exit(1);
     }
     

@@ -158,4 +158,128 @@ describe('CLI Export Command', () => {
       cleanupTestFiles();
     }
   });
+
+  test('export command should auto-infer input file when only output provided', () => {
+    setupTestFiles();
+    
+    // Create a mock Claude directory structure that matches the path inference logic
+    const mockHomeDir = testDir;
+    const projectPath = path.join(testDir, 'project');
+    const mockClaudeDir = path.join(mockHomeDir, '.claude', 'projects', '-' + projectPath.replace(/\//g, '-'));
+    fs.mkdirSync(mockClaudeDir, { recursive: true });
+    
+    const mockJsonlPath = path.join(mockClaudeDir, 'test-session.jsonl');
+    
+    const testContent = [
+      '{"message": {"role": "user", "content": "Auto-inferred test"}, "timestamp": "2023-01-01T12:00:00.000Z"}',
+      '{"message": {"role": "assistant", "content": [{"type": "text", "text": "This worked!"}]}, "timestamp": "2023-01-01T12:01:00.000Z"}'
+    ].join('\n');
+    
+    fs.writeFileSync(mockJsonlPath, testContent);
+    
+    // Mock the path inference module
+    const originalPathInference = require('../src/path-inference');
+    const mockPathInference = {
+      ...originalPathInference,
+      inferClaudeJsonlPath: () => mockJsonlPath
+    };
+    
+    // Temporarily replace the module
+    delete require.cache[require.resolve('../src/path-inference')];
+    require.cache[require.resolve('../src/path-inference')] = {
+      exports: mockPathInference
+    };
+    
+    // Mock process.argv for single-argument export command
+    const originalArgv = process.argv;
+    process.argv = ['node', 'cli.js', 'export', testOutput];
+    
+    try {
+      // Reload CLI module to pick up mocked path inference
+      delete require.cache[require.resolve('../cli')];
+      const { main: mockMain } = require('../cli');
+      
+      mockMain();
+      
+      // Should create output file using auto-inferred input
+      assert(fs.existsSync(testOutput), 'Output file should be created');
+      const content = fs.readFileSync(testOutput, 'utf8');
+      assert(content.includes('Auto-inferred test'), 'Should contain content from inferred JSONL file');
+      
+    } finally {
+      process.argv = originalArgv;
+      
+      // Restore original modules
+      delete require.cache[require.resolve('../src/path-inference')];
+      delete require.cache[require.resolve('../cli')];
+      
+      cleanupTestFiles();
+    }
+  });
+
+  test('export command should show helpful error when path inference fails', () => {
+    setupTestFiles();
+    
+    // Mock console.error to capture error messages
+    const originalConsoleError = console.error;
+    let errorMessage = '';
+    console.error = (msg) => { errorMessage += msg + '\n'; };
+    
+    // Mock process.exit to prevent actual exit
+    const originalExit = process.exit;
+    let exitCode = null;
+    process.exit = (code) => { exitCode = code; throw new Error('Mock exit'); };
+    
+    // Mock process.argv for single-argument export command in non-Claude directory
+    const originalArgv = process.argv;
+    const originalCwd = process.cwd;
+    
+    process.cwd = () => '/tmp/non-claude-project';
+    process.argv = ['node', 'cli.js', 'export', testOutput];
+    
+    try {
+      assert.throws(() => main(), /Mock exit/);
+      
+      // Should exit with error code and show helpful message
+      assert.strictEqual(exitCode, 1, 'Should exit with error code 1');
+      assert(errorMessage.includes('Could not infer'), 'Should show inference failure message');
+      assert(errorMessage.includes('claude-sync export'), 'Should show usage example');
+      
+    } finally {
+      process.argv = originalArgv;
+      process.cwd = originalCwd;
+      console.error = originalConsoleError;
+      process.exit = originalExit;
+      cleanupTestFiles();
+    }
+  });
+
+  test('export command should maintain backward compatibility with explicit input/output', () => {
+    setupTestFiles();
+    
+    // This test ensures existing 2-argument behavior still works
+    const testContent = [
+      '{"message": {"role": "user", "content": "Backward compatibility test"}, "timestamp": "2023-01-01T12:00:00.000Z"}',
+      '{"message": {"role": "assistant", "content": [{"type": "text", "text": "Still works!"}]}, "timestamp": "2023-01-01T12:01:00.000Z"}'
+    ].join('\n');
+    
+    fs.writeFileSync(testInput, testContent);
+    
+    // Mock process.argv for traditional 2-argument export command
+    const originalArgv = process.argv;
+    process.argv = ['node', 'cli.js', 'export', testInput, testOutput];
+    
+    try {
+      main();
+      
+      // Should work exactly as before
+      assert(fs.existsSync(testOutput), 'Output file should be created');
+      const content = fs.readFileSync(testOutput, 'utf8');
+      assert(content.includes('Backward compatibility test'), 'Should contain expected content');
+      
+    } finally {
+      process.argv = originalArgv;
+      cleanupTestFiles();
+    }
+  });
 });
